@@ -40,7 +40,13 @@
 (function(Raphael) {
 
   var initialized = false;
-  var opts = { zoom: true, pan: true, drag: true, stopPanOnMouseOut: false };
+
+  var opts = {
+    zoom: true,
+    pan: true,
+    drag: true,
+    stopPanOnMouseOut: false
+  };
 
   function init(paper) {
     /**
