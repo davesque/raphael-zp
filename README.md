@@ -7,8 +7,6 @@ allow click and drag panning as well as zooming.
 
 Forked from [Raphaël-VEMap](https://github.com/christocracy/raphael-vemap).
 
-## Usage
-
 ## License
 
     Copyright 2013-present David Sanders <davesque@gmail.com> (Slimming of functionality and updates to work with v2.1.0).  All rights reserved.
