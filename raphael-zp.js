@@ -37,7 +37,7 @@
  * policies, either expressed or implied.
  */
 
-(function() {
+(function(Raphael) {
   var initialized = false;
 
   var opts = { zoom: true, pan: true, drag: true };
@@ -239,4 +239,5 @@
     if (!initialized) init(this);
     return this;
   };
-})();
+
+})(Raphael);
