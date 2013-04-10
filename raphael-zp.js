@@ -73,7 +73,7 @@
 
     var state = 'none', stateTarget, stateOrigin, stateTf;
 
-    setupHandlers(root);
+    setupHandlers(paper.canvas);
 
     initialized = true;
 
