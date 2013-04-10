@@ -77,10 +77,8 @@
      */
     function getEventPoint(evt) {
       var p = root.createSVGPoint();
-
       p.x = evt.clientX;
       p.y = evt.clientY;
-
       return p;
     }
 
@@ -89,7 +87,6 @@
      */
     function setCTM(element, matrix) {
       var s = "matrix(" + matrix.a + "," + matrix.b + "," + matrix.c + "," + matrix.d + "," + matrix.e + "," + matrix.f + ")";
-
       element.setAttribute("transform", s);
     }
 
@@ -98,7 +95,6 @@
      */
     function dumpMatrix(matrix) {
       var s = "[ " + matrix.a + ", " + matrix.c + ", " + matrix.e + "\n  " + matrix.b + ", " + matrix.d + ", " + matrix.f + "\n  0, 0, 1 ]";
-
       return s;
     }
 
@@ -106,8 +102,7 @@
      * Sets attributes of an element.
      */
     function setAttributes(element, attributes){
-      for (var i in attributes)
-        element.setAttributeNS(null, i, attributes[i]);
+      for (var i in attributes) element.setAttributeNS(null, i, attributes[i]);
     }
 
     /**
@@ -116,8 +111,7 @@
     function handleMouseWheel(evt) {
       if (!opts.zoom) return;
 
-      if(evt.preventDefault)
-        evt.preventDefault();
+      if (evt.preventDefault) evt.preventDefault();
 
       evt.returnValue = false;
 
@@ -125,10 +119,8 @@
 
       var delta;
 
-      if(evt.wheelDelta)
-        delta = evt.wheelDelta / 3600; // Chrome/Safari
-      else
-        delta = evt.detail / -90; // Mozilla
+      if (evt.wheelDelta) delta = evt.wheelDelta / 3600; // Chrome/Safari
+      else delta = evt.detail / -90; // Mozilla
 
       var z = 1 + delta; // Zoom factor: 0.9/1.1
 
@@ -141,10 +133,9 @@
       // Compute new scale matrix in current mouse position
       var k = root.createSVGMatrix().translate(p.x, p.y).scale(z).translate(-p.x, -p.y);
 
-        setCTM(g, g.getCTM().multiply(k));
+      setCTM(g, g.getCTM().multiply(k));
 
-      if(typeof(stateTf) == "undefined")
-        stateTf = g.getCTM().inverse();
+      if (typeof(stateTf) == "undefined") stateTf = g.getCTM().inverse();
 
       stateTf = stateTf.multiply(k.inverse());
     }
@@ -155,8 +146,7 @@
     function handleMouseMove(evt) {
       var p;
 
-      if(evt.preventDefault)
-        evt.preventDefault();
+      if (evt.preventDefault) evt.preventDefault();
 
       evt.returnValue = false;
 
@@ -164,7 +154,7 @@
 
       var g = svgDoc.getElementById("viewport");
 
-      if(state == 'pan') {
+      if (state == 'pan') {
         // Pan mode
         if (!opts.pan) return;
 
