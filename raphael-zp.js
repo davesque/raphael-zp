@@ -40,7 +40,6 @@
 (function(Raphael) {
 
   var initialized = false;
-
   var defaults = {
     zoom: true,
     pan: true,
@@ -56,9 +55,7 @@
       root.onmousedown = handleMouseDown;
       root.onmousemove = handleMouseMove;
       root.onmouseup = handleMouseUp;
-      if ( opts.stopPanOnMouseOut ) {
-        root.onmouseout = handleMouseUp;
-      }
+      if ( opts.stopPanOnMouseOut ) root.onmouseout = handleMouseUp;
 
       if ( navigator.userAgent.toLowerCase().indexOf('webkit') >= 0 )
         window.addEventListener('mousewheel', handleMouseWheel, false); // Chrome/Safari
