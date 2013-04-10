@@ -40,7 +40,7 @@
 (function(Raphael) {
 
   var initialized = false;
-  var opts = { zoom: true, pan: true, drag: true };
+  var opts = { zoom: true, pan: true, drag: true, stopPanOnMouseOut: false };
 
   function init(paper) {
     /**
@@ -50,7 +50,9 @@
       root.onmousedown = handleMouseDown;
       root.onmousemove = handleMouseMove;
       root.onmouseup = handleMouseUp;
-      //root.onmouseout = handleMouseUp; // Decomment this to stop the pan functionality when dragging out of the SVG element
+      if ( opts.stopPanOnMouseOut ) {
+        root.onmouseout = handleMouseUp;
+      }
 
       if(navigator.userAgent.toLowerCase().indexOf('webkit') >= 0)
         window.addEventListener('mousewheel', handleMouseWheel, false); // Chrome/Safari
