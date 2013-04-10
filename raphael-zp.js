@@ -38,8 +38,8 @@
  */
 
 (function(Raphael) {
-  var initialized = false;
 
+  var initialized = false;
   var opts = { zoom: true, pan: true, drag: true };
 
   function init(paper) {
