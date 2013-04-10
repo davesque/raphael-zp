@@ -1,4 +1,5 @@
 /*global Raphael: true*/
+
 /**
  * Raphaël-ZP: A zoom/pan plugin for Raphaël.
  * ==========================================
