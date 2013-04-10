@@ -39,7 +39,7 @@
 (function() {
 	var initialized = false;
 
-	var opts = { zoom: true, pan: true, drag: true }
+	var opts = { zoom: true, pan: true, drag: true };
 
 	function init(paper) {
 		var root = paper.canvas;
@@ -244,5 +244,5 @@
 
 		if (!initialized) init(this);
 		return this;
-	}
+  };
 })();
