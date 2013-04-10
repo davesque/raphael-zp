@@ -41,14 +41,14 @@
 
   var initialized = false;
 
-  var opts = {
+  var defaults = {
     zoom: true,
     pan: true,
     drag: true,
     stopPanOnMouseOut: false
   };
 
-  function init(paper) {
+  function init(paper, opts) {
     /**
      * Registers event handlers.
      */
@@ -186,7 +186,6 @@
      */
     function handleMouseDown(evt) {
       if ( evt.preventDefault ) evt.preventDefault();
-
       evt.returnValue = false;
 
       var svgDoc = evt.target.ownerDocument;
@@ -217,26 +216,21 @@
     }
 
     /**
-     * Handle mouse button release event.
+     * Resets state on mouse button up event.
      */
     function handleMouseUp(e) {
       if ( e.preventDefault ) e.preventDefault();
       e.returnValue = false;
-
       state = '';
     }
   }
 
-  Raphael.fn.ZPD = function(o) {
-    if ( o ) {
-      for ( var key in o ) {
-        if ( opts[key] !== undefined ) {
-          opts[key] = o[key];
-        }
-      }
-    }
-
-    if ( !initialized ) init(this);
+  /**
+   * Activates zoom and pan functionality on a paper object.
+   */
+  Raphael.fn.ZPD = function(opts) {
+    _.defaults(opts || {}, defaults);
+    if ( !initialized ) init(this, opts);
     return this;
   };
 
