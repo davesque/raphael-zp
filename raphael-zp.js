@@ -54,7 +54,7 @@
         root.onmouseout = handleMouseUp;
       }
 
-      if(navigator.userAgent.toLowerCase().indexOf('webkit') >= 0)
+      if ( navigator.userAgent.toLowerCase().indexOf('webkit') >= 0 )
         window.addEventListener('mousewheel', handleMouseWheel, false); // Chrome/Safari
       else
         window.addEventListener('DOMMouseScroll', handleMouseWheel, false); // Others
@@ -104,16 +104,16 @@
      * Sets attributes of an element.
      */
     function setAttributes(element, attributes){
-      for (var i in attributes) element.setAttributeNS(null, i, attributes[i]);
+      for ( var i in attributes ) element.setAttributeNS(null, i, attributes[i]);
     }
 
     /**
      * Handle mouse move event.
      */
     function handleMouseWheel(evt) {
-      if (!opts.zoom) return;
+      if ( !opts.zoom ) return;
 
-      if (evt.preventDefault) evt.preventDefault();
+      if ( evt.preventDefault ) evt.preventDefault();
 
       evt.returnValue = false;
 
@@ -121,7 +121,7 @@
 
       var delta;
 
-      if (evt.wheelDelta) delta = evt.wheelDelta / 3600; // Chrome/Safari
+      if ( evt.wheelDelta ) delta = evt.wheelDelta / 3600; // Chrome/Safari
       else delta = evt.detail / -90; // Mozilla
 
       var z = 1 + delta; // Zoom factor: 0.9/1.1
@@ -137,7 +137,7 @@
 
       setCTM(g, g.getCTM().multiply(k));
 
-      if (typeof(stateTf) == "undefined") stateTf = g.getCTM().inverse();
+      if ( typeof(stateTf) == "undefined" ) stateTf = g.getCTM().inverse();
 
       stateTf = stateTf.multiply(k.inverse());
     }
@@ -148,7 +148,7 @@
     function handleMouseMove(evt) {
       var p;
 
-      if (evt.preventDefault) evt.preventDefault();
+      if ( evt.preventDefault ) evt.preventDefault();
 
       evt.returnValue = false;
 
@@ -156,16 +156,16 @@
 
       var g = svgDoc.getElementById("viewport");
 
-      if (state == 'pan') {
+      if ( state == 'pan' ) {
         // Pan mode
-        if (!opts.pan) return;
+        if ( !opts.pan ) return;
 
         p = getEventPoint(evt).matrixTransform(stateTf);
 
         setCTM(g, stateTf.inverse().translate(p.x - stateOrigin.x, p.y - stateOrigin.y));
-      } else if(state == 'move') {
+      } else if ( state == 'move' ) {
         // Move mode
-        if (!opts.drag) return;
+        if ( !opts.drag ) return;
 
         p = getEventPoint(evt).matrixTransform(g.getCTM().inverse());
 
@@ -179,8 +179,7 @@
      * Handle click event.
      */
     function handleMouseDown(evt) {
-      if(evt.preventDefault)
-        evt.preventDefault();
+      if ( evt.preventDefault ) evt.preventDefault();
 
       evt.returnValue = false;
 
@@ -188,9 +187,9 @@
 
       var g = svgDoc.getElementById("viewport");
 
-      if(evt.target.tagName == "svg") {
+      if ( evt.target.tagName == "svg" ) {
         // Pan mode
-        if (!opts.pan) return;
+        if ( !opts.pan ) return;
 
         state = 'pan';
 
@@ -199,7 +198,7 @@
         stateOrigin = getEventPoint(evt).matrixTransform(stateTf);
       } else {
         // Move mode
-        if (!opts.drag || evt.target.draggable === false) return;
+        if ( !opts.drag || evt.target.draggable === false ) return;
 
         state = 'move';
 
@@ -215,14 +214,13 @@
      * Handle mouse button release event.
      */
     function handleMouseUp(evt) {
-      if(evt.preventDefault)
-        evt.preventDefault();
+      if ( evt.preventDefault ) evt.preventDefault();
 
       evt.returnValue = false;
 
       var svgDoc = evt.target.ownerDocument;
 
-      if((state == 'pan' && opts.pan) || (state == 'move' && opts.drag)) {
+      if ( (state == 'pan' && opts.pan) || (state == 'move' && opts.drag) ) {
         // Quit pan mode
         state = '';
       }
@@ -230,15 +228,15 @@
   }
 
   Raphael.fn.ZPD = function(o) {
-    if (o) {
-      for (var key in o) {
-        if (opts[key] !== undefined) {
+    if ( o ) {
+      for ( var key in o ) {
+        if ( opts[key] !== undefined ) {
           opts[key] = o[key];
         }
       }
     }
 
-    if (!initialized) init(this);
+    if ( !initialized ) init(this);
     return this;
   };
 
