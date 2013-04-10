@@ -42,23 +42,10 @@
 	var opts = { zoom: true, pan: true, drag: true };
 
 	function init(paper) {
-		var root = paper.canvas;
-
-		var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-		g.id = 'viewport';
-		root.appendChild(g);
-		paper.canvas = g;
-
-		var state = 'none', stateTarget, stateOrigin, stateTf;
-
-		setupHandlers(root);
-
-		initialized = true;
-
 		/**
 		 * Handler registration
 		 */
-		function setupHandlers(root){
+		function setupHandlers(root) {
 			root.onmousedown = handleMouseDown;
 			root.onmousemove = handleMouseMove;
 			root.onmouseup = handleMouseUp;
@@ -69,6 +56,20 @@
 			else
 				window.addEventListener('DOMMouseScroll', handleMouseWheel, false); // Others
 		}
+
+		var root = paper.canvas;
+
+		var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+		g.id = 'viewport';
+
+		root.appendChild(g);
+		paper.canvas = g;
+
+		var state = 'none', stateTarget, stateOrigin, stateTf;
+
+		setupHandlers(root);
+
+		initialized = true;
 
 		/**
 		 * Instance an SVGPoint object with given event coordinates.
