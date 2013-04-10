@@ -166,15 +166,6 @@
         p = getEventPoint(evt).matrixTransform(stateTf);
 
         setCTM(g, stateTf.inverse().translate(p.x - stateOrigin.x, p.y - stateOrigin.y));
-      } else if ( state == 'move' ) {
-        // Move mode
-        if ( !opts.drag ) return;
-
-        p = getEventPoint(evt).matrixTransform(g.getCTM().inverse());
-
-        setCTM(stateTarget, root.createSVGMatrix().translate(p.x - stateOrigin.x, p.y - stateOrigin.y).multiply(g.getCTM().inverse()).multiply(stateTarget.getCTM()));
-
-        stateOrigin = p;
       }
     }
 
@@ -194,17 +185,6 @@
         if ( !opts.pan ) return;
 
         state = 'pan';
-
-        stateTf = g.getCTM().inverse();
-
-        stateOrigin = getEventPoint(evt).matrixTransform(stateTf);
-      } else {
-        // Move mode
-        if ( !opts.drag || evt.target.draggable === false ) return;
-
-        state = 'move';
-
-        stateTarget = evt.target;
 
         stateTf = g.getCTM().inverse();
 
