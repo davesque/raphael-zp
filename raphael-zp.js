@@ -151,6 +151,8 @@
 		 * Handle mouse move event.
 		 */
 		function handleMouseMove(evt) {
+      var p;
+
 			if(evt.preventDefault)
 				evt.preventDefault();
 
@@ -164,14 +166,14 @@
 				// Pan mode
 				if (!opts.pan) return;
 
-				var p = getEventPoint(evt).matrixTransform(stateTf);
+				p = getEventPoint(evt).matrixTransform(stateTf);
 
 				setCTM(g, stateTf.inverse().translate(p.x - stateOrigin.x, p.y - stateOrigin.y));
 			} else if(state == 'move') {
 				// Move mode
 				if (!opts.drag) return;
 
-				var p = getEventPoint(evt).matrixTransform(g.getCTM().inverse());
+				p = getEventPoint(evt).matrixTransform(g.getCTM().inverse());
 
 				setCTM(stateTarget, root.createSVGMatrix().translate(p.x - stateOrigin.x, p.y - stateOrigin.y).multiply(g.getCTM().inverse()).multiply(stateTarget.getCTM()));
 
