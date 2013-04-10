@@ -44,7 +44,7 @@
 
   function init(paper) {
     /**
-     * Handler registration
+     * Registers event handlers.
      */
     function setupHandlers(root) {
       root.onmousedown = handleMouseDown;
