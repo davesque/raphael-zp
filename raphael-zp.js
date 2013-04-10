@@ -206,7 +206,7 @@
 				stateOrigin = getEventPoint(evt).matrixTransform(stateTf);
 			} else {
 				// Move mode
-				if (!opts.drag || evt.target.draggable == false) return;
+				if (!opts.drag || evt.target.draggable === false) return;
 
 				state = 'move';
 
