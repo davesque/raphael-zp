@@ -104,7 +104,7 @@
 		 * Sets attributes of an element.
 		 */
 		function setAttributes(element, attributes){
-			for (i in attributes)
+			for (var i in attributes)
 				element.setAttributeNS(null, i, attributes[i]);
 		}
 
