@@ -219,17 +219,11 @@
     /**
      * Handle mouse button release event.
      */
-    function handleMouseUp(evt) {
-      if ( evt.preventDefault ) evt.preventDefault();
+    function handleMouseUp(e) {
+      if ( e.preventDefault ) e.preventDefault();
+      e.returnValue = false;
 
-      evt.returnValue = false;
-
-      var svgDoc = evt.target.ownerDocument;
-
-      if ( (state == 'pan' && opts.pan) || (state == 'move' && opts.drag) ) {
-        // Quit pan mode
-        state = '';
-      }
+      state = '';
     }
   }
 
