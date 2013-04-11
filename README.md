@@ -14,7 +14,7 @@ Using the plugin is easy:
 ```javascript
 var paper = new Raphael(el, width, height);
 
-// Calling ZP in the paper object will enable panning and zooming
+// Calling ZP on the paper object will enable panning and zooming
 paper.ZP();
 ```
 
