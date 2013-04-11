@@ -136,10 +136,8 @@
       if ( e.preventDefault ) e.preventDefault();
       e.returnValue = false;
 
-      if ( e.target.tagName == "svg" ) {
-        state = "pan";
-        stateOrigin = getEventPoint(e);
-      }
+      state = "pan";
+      stateOrigin = getEventPoint(e);
     }
 
     /**
