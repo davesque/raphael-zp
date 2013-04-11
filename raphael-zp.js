@@ -107,12 +107,12 @@
       ratio = paper.width / paper.height;
       delta *= 100;
 
-      viewBox.x += ratio * delta;
-      viewBox.y += delta;
-      viewBox.w -= 2 * ratio * delta;
-      viewBox.h -= 2 * delta;
+      viewBox[0] += ratio * delta;
+      viewBox[1] += delta;
+      viewBox[2] -= 2 * ratio * delta;
+      //viewBox[3] -= 2 * delta;
 
-      paper.setViewBox(viewBox.x, viewBox.y, viewBox.w, 1);
+      paper.setViewBox(viewBox[0], viewBox[1], viewBox[2], viewBox[3]);
     }
 
     /**
@@ -125,7 +125,7 @@
       if ( state == "pan" ) {
         var p = getEventPoint(e);
         var d = getPointDelta(stateOrigin, p);
-        paper.setViewBox(viewBox.x - d.dx, viewBox.y - d.dy, viewBox.w, viewBox.h);
+        paper.setViewBox(viewBox[0] - d.dx, viewBox[1] - d.dy, viewBox[2], viewBox[3]);
       }
     }
 
@@ -151,21 +151,19 @@
 
       var p = getEventPoint(e);
       var d = getPointDelta(stateOrigin, p);
-      viewBox.x -= d.dx;
-      viewBox.y -= d.dy;
+      viewBox[0] -= d.dx;
+      viewBox[1] -= d.dy;
 
       state = stateOrigin = null;
     }
 
     state = stateOrigin = null;
 
-    origViewBox = {
-      x: paper._viewBox[0],
-      y: paper._viewBox[1],
-      w: paper._viewBox[2],
-      h: paper._viewBox[3]
-    };
-    viewBox = _.clone(origViewBox);
+    // Force view box if none specified
+    if ( !paper._vbSize ) paper.setViewBox(0, 0, paper.width, 1);
+
+    paper._zpResetViewBox = _.clone(paper._viewBox);
+    viewBox = _.clone(paper._viewBox);
 
     setupHandlers(paper.canvas);
     initialized = true;
