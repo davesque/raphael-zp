@@ -155,6 +155,8 @@
       state = stateOrigin = null;
     }
 
+    if ( paper._zpInitialized ) return paper;
+
     state = stateOrigin = null;
 
     // Force view box if none specified
@@ -164,16 +166,17 @@
     viewBox = _.clone(paper._viewBox);
 
     setupHandlers(paper.canvas);
-    initialized = true;
+
+    paper._zpInitialized = true;
+
+    return paper;
   }
 
   /**
    * Activates zoom and pan functionality on a paper object.
    */
   Raphael.fn.ZP = function(opts) {
-    opts = _.defaults(opts || {}, defaults);
-    if ( !initialized ) init(this, opts);
-    return this;
+    return init(this, _.defaults(opts || {}, defaults));
   };
 
 })(Raphael);
