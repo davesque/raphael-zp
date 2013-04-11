@@ -43,152 +43,102 @@
   var defaults = {
     zoom: true,
     pan: true,
-    drag: true,
     stopPanOnMouseOut: false
   };
 
   function init(paper, opts) {
+    var state, stateOrigin;
+    var viewBox, origViewBox;
+
     /**
      * Registers event handlers.
      */
     function setupHandlers(root) {
-      root.onmousedown = handleMouseDown;
-      root.onmousemove = handleMouseMove;
-      root.onmouseup = handleMouseUp;
-      if ( opts.stopPanOnMouseOut ) root.onmouseout = handleMouseUp;
+      if ( opts.pan ) {
+        root.onmousedown = handleMouseDown;
+        root.onmousemove = handleMouseMove;
+        root.onmouseup = handleMouseUp;
+        if ( opts.stopPanOnMouseOut ) root.onmouseout = handleMouseUp;
+      }
 
-      if ( navigator.userAgent.toLowerCase().indexOf('webkit') >= 0 )
-        window.addEventListener('mousewheel', handleMouseWheel, false); // Chrome/Safari
-      else
-        window.addEventListener('DOMMouseScroll', handleMouseWheel, false); // Others
-    }
-
-    var root = paper.canvas;
-
-    var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    g.id = 'viewport';
-
-    root.appendChild(g);
-    paper.canvas = g;
-
-    var state = 'none', stateTarget, stateOrigin, stateTf;
-
-    setupHandlers(paper.canvas);
-
-    initialized = true;
-
-    /**
-     * Instance an SVGPoint object with given event coordinates.
-     */
-    function getEventPoint(evt) {
-      var p = root.createSVGPoint();
-      p.x = evt.clientX;
-      p.y = evt.clientY;
-      return p;
-    }
-
-    /**
-     * Sets the current transform matrix of an element.
-     */
-    function setCTM(element, matrix) {
-      var s = "matrix(" + matrix.a + "," + matrix.b + "," + matrix.c + "," + matrix.d + "," + matrix.e + "," + matrix.f + ")";
-      element.setAttribute("transform", s);
-    }
-
-    /**
-     * Dumps a matrix to a string (useful for debug).
-     */
-    function dumpMatrix(matrix) {
-      var s = "[ " + matrix.a + ", " + matrix.c + ", " + matrix.e + "\n  " + matrix.b + ", " + matrix.d + ", " + matrix.f + "\n  0, 0, 1 ]";
-      return s;
-    }
-
-    /**
-     * Sets attributes of an element.
-     */
-    function setAttributes(element, attributes){
-      for ( var i in attributes ) element.setAttributeNS(null, i, attributes[i]);
-    }
-
-    /**
-     * Handle mouse move event.
-     */
-    function handleMouseWheel(evt) {
-      if ( !opts.zoom ) return;
-
-      if ( evt.preventDefault ) evt.preventDefault();
-
-      evt.returnValue = false;
-
-      var svgDoc = evt.target.ownerDocument;
-
-      var delta;
-
-      if ( evt.wheelDelta ) delta = evt.wheelDelta / 3600; // Chrome/Safari
-      else delta = evt.detail / -90; // Mozilla
-
-      var z = 1 + delta; // Zoom factor: 0.9/1.1
-
-      var g = svgDoc.getElementById("viewport");
-
-      var p = getEventPoint(evt);
-
-      p = p.matrixTransform(g.getCTM().inverse());
-
-      // Compute new scale matrix in current mouse position
-      var k = root.createSVGMatrix().translate(p.x, p.y).scale(z).translate(-p.x, -p.y);
-
-      setCTM(g, g.getCTM().multiply(k));
-
-      if ( typeof(stateTf) == "undefined" ) stateTf = g.getCTM().inverse();
-
-      stateTf = stateTf.multiply(k.inverse());
-    }
-
-    /**
-     * Handle mouse move event.
-     */
-    function handleMouseMove(evt) {
-      var p;
-
-      if ( evt.preventDefault ) evt.preventDefault();
-
-      evt.returnValue = false;
-
-      var svgDoc = evt.target.ownerDocument;
-
-      var g = svgDoc.getElementById("viewport");
-
-      if ( state == 'pan' ) {
-        // Pan mode
-        if ( !opts.pan ) return;
-
-        p = getEventPoint(evt).matrixTransform(stateTf);
-
-        setCTM(g, stateTf.inverse().translate(p.x - stateOrigin.x, p.y - stateOrigin.y));
+      if ( opts.zoom ) {
+        if ( navigator.userAgent.toLowerCase().indexOf('webkit') >= 0 )
+          window.addEventListener('mousewheel', handleMouseWheel, false); // Chrome/Safari
+        else
+          window.addEventListener('DOMMouseScroll', handleMouseWheel, false); // Others
       }
     }
 
     /**
-     * Handle click event.
+     * Gets an SVGPoint object for the given paper and event objects.
      */
-    function handleMouseDown(evt) {
-      if ( evt.preventDefault ) evt.preventDefault();
-      evt.returnValue = false;
+    function getEventPoint(e) {
+      var p = paper.canvas.createSVGPoint();
+      p.x = e.clientX;
+      p.y = e.clientY;
+      return p;
+    }
 
-      var svgDoc = evt.target.ownerDocument;
+    /**
+     * Gets the delta (relative to the paper's viewbox size) between the x and
+     * y coordinates for two event points.
+     */
+    function getPointDelta(a, b) {
+      return {
+        dx: (b.x - a.x) * paper._vbSize,
+        dy: (b.y - a.y) * paper._vbSize
+      };
+    }
 
-      var g = svgDoc.getElementById("viewport");
+    /**
+     * Scales (zooms) the paper view box.
+     */
+    function handleMouseWheel(e) {
+      var delta, ratio;
 
-      if ( evt.target.tagName == "svg" ) {
-        // Pan mode
-        if ( !opts.pan ) return;
+      if ( e.preventDefault ) e.preventDefault();
+      e.returnValue = false;
 
-        state = 'pan';
+      // Chrome/Safari
+      if ( e.wheelDelta ) delta = e.wheelDelta / 3600;
+      // Mozilla
+      else delta = e.detail / -90; // Mozilla
 
-        stateTf = g.getCTM().inverse();
+      ratio = paper.width / paper.height;
+      delta *= 1000;
 
-        stateOrigin = getEventPoint(evt).matrixTransform(stateTf);
+      viewBox.x += ratio * delta;
+      viewBox.y += delta;
+      viewBox.w -= 2 * ratio * delta;
+      viewBox.h -= 2 * delta;
+
+      paper.setViewBox(viewBox.x, viewBox.y, viewBox.w, 1);
+    }
+
+    /**
+     * Modifies the paper view box if current state is "pan".
+     */
+    function handleMouseMove(e) {
+      if ( e.preventDefault ) e.preventDefault();
+      e.returnValue = false;
+
+      if ( state == "pan" ) {
+        var p = getEventPoint(e);
+        var d = getPointDelta(stateOrigin, p);
+        paper.setViewBox(viewBox.x - d.dx, viewBox.y - d.dy, viewBox.w, viewBox.h);
+      }
+    }
+
+    /**
+     * Sets "pan" state and records event origin.
+     */
+    function handleMouseDown(e) {
+      if ( e.preventDefault ) e.preventDefault();
+      e.returnValue = false;
+
+      if ( e.target.tagName == "svg" ) {
+        state = "pan";
+        stateOrigin = getEventPoint(e);
       }
     }
 
@@ -198,15 +148,34 @@
     function handleMouseUp(e) {
       if ( e.preventDefault ) e.preventDefault();
       e.returnValue = false;
-      state = '';
+
+      var p = getEventPoint(e);
+      var d = getPointDelta(stateOrigin, p);
+      viewBox.x -= d.dx;
+      viewBox.y -= d.dy;
+
+      state = stateOrigin = null;
     }
+
+    state = stateOrigin = null;
+
+    origViewBox = {
+      x: paper._viewBox[0],
+      y: paper._viewBox[1],
+      w: paper._viewBox[2],
+      h: paper._viewBox[3]
+    };
+    viewBox = _.clone(origViewBox);
+
+    setupHandlers(paper.canvas);
+    initialized = true;
   }
 
   /**
    * Activates zoom and pan functionality on a paper object.
    */
-  Raphael.fn.ZPD = function(opts) {
-    _.defaults(opts || {}, defaults);
+  Raphael.fn.ZP = function(opts) {
+    opts = _.defaults(opts || {}, defaults);
     if ( !initialized ) init(this, opts);
     return this;
   };
