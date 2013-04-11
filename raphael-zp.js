@@ -63,9 +63,9 @@
 
       if ( opts.zoom ) {
         if ( navigator.userAgent.toLowerCase().indexOf('webkit') >= 0 )
-          window.addEventListener('mousewheel', handleMouseWheel, false); // Chrome/Safari
+          document.addEventListener('mousewheel', handleMouseWheel, false); // Chrome/Safari
         else
-          window.addEventListener('DOMMouseScroll', handleMouseWheel, false); // Others
+          document.addEventListener('DOMMouseScroll', handleMouseWheel, false); // Others
       }
     }
 
