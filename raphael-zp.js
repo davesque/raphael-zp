@@ -39,7 +39,6 @@
 
 (function(Raphael) {
 
-  var initialized = false;
   var defaults = {
     zoom: true,
     pan: true,
