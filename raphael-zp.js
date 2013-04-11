@@ -37,7 +37,7 @@
  * policies, either expressed or implied.
  */
 
-(function(Raphael) {
+;(function(Raphael) {
 
   var defaults = {
     zoom: true,
