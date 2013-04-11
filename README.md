@@ -27,6 +27,7 @@ var paper = new Raphael(el, width, height);
 paper.ZP({
   zoom: true,
   pan: true,
+  // If true, panning stops when the mouse leaves the area of the svg canvas
   stopPanOnMouseOut: false
 });
 ```
