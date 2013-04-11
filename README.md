@@ -31,6 +31,13 @@ paper.ZP({
 });
 ```
 
+To remove zooming and panning behavior from a paper object:
+
+```javascript
+// Removes zooming and panning behavior
+paper.unZP();
+```
+
 ## License
 
 Please take a moment to review the license as specified in the `LICENSE` file.
