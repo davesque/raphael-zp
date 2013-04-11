@@ -52,12 +52,14 @@
     /**
      * Registers event handlers.
      */
-    function setupHandlers(root) {
+    function setupHandlers(el) {
+      var $el = $(el);
+
       if ( opts.pan ) {
-        root.onmousedown = handleMouseDown;
-        root.onmousemove = handleMouseMove;
-        root.onmouseup = handleMouseUp;
-        if ( opts.stopPanOnMouseOut ) root.onmouseout = handleMouseUp;
+        $el.bind("mousedown", handleMouseDown);
+        $el.bind("mousemove", handleMouseMove);
+        $el.bind("mouseup", handleMouseUp);
+        if ( opts.stopPanOnMouseOut ) $el.bind("mouseout", handleMouseUp);
       }
 
       if ( opts.zoom ) {
@@ -65,6 +67,27 @@
           document.addEventListener('mousewheel', handleMouseWheel, false); // Chrome/Safari
         else
           document.addEventListener('DOMMouseScroll', handleMouseWheel, false); // Others
+      }
+    }
+
+    /**
+     * Un-registers event handlers.
+     */
+    function removeHandlers(el) {
+      var $el = $(el);
+
+      if ( opts.pan ) {
+        $el.unbind("mousedown", handleMouseDown);
+        $el.unbind("mousemove", handleMouseMove);
+        $el.unbind("mouseup", handleMouseUp);
+        if ( opts.stopPanOnMouseOut ) $el.unbind("mouseout", handleMouseUp);
+      }
+
+      if ( opts.zoom ) {
+        if ( navigator.userAgent.toLowerCase().indexOf('webkit') >= 0 )
+          document.removeEventListener('mousewheel', handleMouseWheel, false); // Chrome/Safari
+        else
+          document.removeEventListener('DOMMouseScroll', handleMouseWheel, false); // Others
       }
     }
 
@@ -165,6 +188,13 @@
     viewBox = _.clone(paper._viewBox);
 
     setupHandlers(paper.canvas);
+
+    paper.unZP = function() {
+      removeHandlers(paper.canvas);
+      delete paper._zpResetViewBox;
+      delete paper._zpInitialized;
+      delete paper.unZP;
+    };
 
     paper._zpInitialized = true;
 
