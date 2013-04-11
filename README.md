@@ -9,12 +9,11 @@ Forked from [Raphaël-VEMap](https://github.com/christocracy/raphael-vemap).
 
 ## Usage
 
-Using the plugin is easy:
+Calling ZP on the paper object will enable panning and zooming for that paper:
 
 ```javascript
 var paper = new Raphael(el, width, height);
 
-// Calling ZP on the paper object will enable panning and zooming
 paper.ZP();
 ```
 
