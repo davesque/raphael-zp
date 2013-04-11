@@ -100,12 +100,12 @@
       e.returnValue = false;
 
       // Chrome/Safari
-      if ( e.wheelDelta ) delta = e.wheelDelta / 3600;
+      if ( e.wheelDelta ) delta = e.wheelDelta / 360;
       // Mozilla
-      else delta = e.detail / -90; // Mozilla
+      else delta = e.detail / -9;
 
       ratio = paper.width / paper.height;
-      delta *= 1000;
+      delta *= 100;
 
       viewBox.x += ratio * delta;
       viewBox.y += delta;
