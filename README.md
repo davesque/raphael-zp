@@ -27,7 +27,10 @@ paper.ZP({
   zoom: true,
   pan: true,
   // If true, panning stops when the mouse leaves the area of the svg canvas
-  stopPanOnMouseOut: false
+  stopPanOnMouseOut: false,
+  // If true, zooming affects the stroke width of elements in the paper.  Set
+  // to false to disable this.
+  scaleStrokeWidth: true
 });
 ```
 

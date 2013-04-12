@@ -42,7 +42,8 @@
   var defaults = {
     zoom: true,
     pan: true,
-    stopPanOnMouseOut: false
+    stopPanOnMouseOut: false,
+    scaleStrokeWidth: true
   };
 
   function init(paper, opts) {
@@ -116,23 +117,34 @@
      * Scales (zooms) the paper view box.
      */
     function handleMouseWheel(e) {
-      var delta, ratio;
+      var wheelDelta, aspectRatio, strokeScale;
 
       if ( e.preventDefault ) e.preventDefault();
       e.returnValue = false;
 
       // Chrome/Safari
-      if ( e.wheelDelta ) delta = e.wheelDelta / 360;
+      if ( e.wheelDelta ) wheelDelta = e.wheelDelta / 360;
       // Mozilla
-      else delta = e.detail / -9;
+      else wheelDelta = e.detail / -9;
 
-      ratio = paper.width / paper.height;
-      delta *= 100;
+      aspectRatio = paper.width / paper.height;
+      wheelDelta *= 100;
 
-      viewBox[0] += ratio * delta;
-      viewBox[1] += delta;
-      viewBox[2] -= 2 * ratio * delta;
-      //viewBox[3] -= 2 * delta;
+      // Update viewbox x and y offset
+      viewBox[0] += aspectRatio * wheelDelta;
+      viewBox[1] += wheelDelta;
+
+      // Update viewbox width.  Calculate width change ratio.  And yes, height
+      // is not being modified on purpose.
+      strokeScale = 1 - 2 * aspectRatio * wheelDelta / viewBox[2];
+      viewBox[2] -= 2 * aspectRatio * wheelDelta;
+
+      if ( opts.scaleStrokeWidth ) {
+        paper.forEach(function(el) {
+          var sw = parseFloat(el.attr("stroke-width"));
+          el.attr("stroke-width", sw / strokeScale);
+        });
+      }
 
       paper.setViewBox(viewBox[0], viewBox[1], viewBox[2], viewBox[3]);
     }
