@@ -128,16 +128,16 @@
       else wheelDelta = e.detail / -9;
 
       aspectRatio = paper.width / paper.height;
-      wheelDelta *= 100;
+      wheelDelta *= 200;
 
       // Update viewbox x and y offset
-      viewBox[0] += aspectRatio * wheelDelta;
-      viewBox[1] += wheelDelta;
+      viewBox[0] += wheelDelta * e.offsetX / paper.height;
+      viewBox[1] += wheelDelta * e.offsetY / paper.height;
 
       // Update viewbox width.  Calculate width change ratio.  And yes, height
-      // is not being modified on purpose.
-      strokeScale = 1 - 2 * aspectRatio * wheelDelta / viewBox[2];
-      viewBox[2] -= 2 * aspectRatio * wheelDelta;
+      // is purposefully being left alone.
+      strokeScale = 1 - wheelDelta * aspectRatio / viewBox[2];
+      viewBox[2] -= wheelDelta * aspectRatio;
 
       if ( opts.scaleStrokeWidth ) {
         paper.forEach(function(el) {
