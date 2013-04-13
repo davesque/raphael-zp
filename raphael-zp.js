@@ -122,19 +122,6 @@
     }
 
     /**
-     * Gets an SVGPoint object for the given event object.
-     */
-    function getEventPoint(e) {
-      var p = paper.canvas.createSVGPoint();
-      var coords = getEventMouseCoords(e);
-
-      p.x = coords.x;
-      p.y = coords.y;
-
-      return p;
-    }
-
-    /**
      * Gets the delta (relative to the paper's viewbox size) between the x and
      * y coordinates for two event points.
      */
@@ -187,8 +174,8 @@
       e.returnValue = false;
 
       if ( state == "pan" ) {
-        var p = getEventPoint(e);
-        var d = getPointDelta(stateOrigin, p);
+        var c = getEventMouseCoords(e);
+        var d = getPointDelta(stateOrigin, c);
         paper.setViewBox(viewBox[0] - d.dx, viewBox[1] - d.dy, viewBox[2], viewBox[3]);
       }
     }
@@ -201,7 +188,7 @@
       e.returnValue = false;
 
       state = "pan";
-      stateOrigin = getEventPoint(e);
+      stateOrigin = getEventMouseCoords(e);
     }
 
     /**
@@ -211,8 +198,8 @@
       if ( e.preventDefault ) e.preventDefault();
       e.returnValue = false;
 
-      var p = getEventPoint(e);
-      var d = getPointDelta(stateOrigin, p);
+      var c = getEventMouseCoords(e);
+      var d = getPointDelta(stateOrigin, c);
       viewBox[0] -= d.dx;
       viewBox[1] -= d.dy;
 
