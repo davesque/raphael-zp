@@ -144,23 +144,21 @@
     /**
      * Scales (zooms) the paper view box.
      */
-    function handleMouseWheel(e) {
-      var wheelDelta, aspectRatio, strokeScale;
+    function handleMouseWheel(e, wheelDelta) {
+      var aspectRatio, strokeScale, c;
 
       if ( e.preventDefault ) e.preventDefault();
       e.returnValue = false;
 
-      // Chrome/Safari
-      if ( e.wheelDelta ) wheelDelta = e.wheelDelta / 360;
-      // Mozilla
-      else wheelDelta = e.detail / -9;
-
       aspectRatio = paper.width / paper.height;
-      wheelDelta *= 200;
+      wheelDelta *= 70;
+
+      console.log(wheelDelta);
 
       // Update viewbox x and y offset
-      viewBox[0] += wheelDelta * e.offsetX / paper.height;
-      viewBox[1] += wheelDelta * e.offsetY / paper.height;
+      c = getEventMouseCoords(e, paper.canvas);
+      viewBox[0] += wheelDelta * c.x / paper.height;
+      viewBox[1] += wheelDelta * c.y / paper.height;
 
       // Update viewbox width.  Calculate width change ratio.  And yes, height
       // is purposefully being left alone.
