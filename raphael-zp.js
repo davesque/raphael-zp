@@ -37,6 +37,13 @@
  * policies, either expressed or implied.
  */
 
+/**
+ * Dependencies:
+ * jQuery -- http://jquery.com/
+ * Underscore.js -- http://underscorejs.org/
+ * jQuery Mousewheel -- https://github.com/brandonaaron/jquery-mousewheel
+ */
+
 ;(function(Raphael) {
 
   var defaults = {
@@ -63,12 +70,7 @@
         if ( opts.stopPanOnMouseOut ) $el.bind("mouseout", handleMouseUp);
       }
 
-      if ( opts.zoom ) {
-        if ( navigator.userAgent.toLowerCase().indexOf('webkit') >= 0 )
-          document.addEventListener('mousewheel', handleMouseWheel, false); // Chrome/Safari
-        else
-          document.addEventListener('DOMMouseScroll', handleMouseWheel, false); // Others
-      }
+      if ( opts.zoom ) $el.bind("mousewheel", handleMouseWheel);
     }
 
     /**
@@ -84,12 +86,7 @@
         if ( opts.stopPanOnMouseOut ) $el.unbind("mouseout", handleMouseUp);
       }
 
-      if ( opts.zoom ) {
-        if ( navigator.userAgent.toLowerCase().indexOf('webkit') >= 0 )
-          document.removeEventListener('mousewheel', handleMouseWheel, false); // Chrome/Safari
-        else
-          document.removeEventListener('DOMMouseScroll', handleMouseWheel, false); // Others
-      }
+      if ( opts.zoom ) $el.unbind("mousewheel", handleMouseWheel);
     }
 
     /**
