@@ -144,8 +144,6 @@
       aspectRatio = paper.width / paper.height;
       wheelDelta *= 70 * opts.mouseWheelSensitivity;
 
-      console.log(wheelDelta);
-
       // Update viewbox x and y offset
       c = getEventMouseCoords(e, paper.canvas);
       viewBox[0] += wheelDelta * c.x / paper.height;
