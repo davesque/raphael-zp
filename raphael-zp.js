@@ -47,9 +47,13 @@
 ;(function(Raphael) {
 
   var defaults = {
-    zoom: true,
+    // Pan options
     pan: true,
     stopPanOnMouseOut: false,
+
+    // Zoom options
+    zoom: true,
+    mouseWheelSensitivity: 1,
     scaleStrokeWidth: true
   };
 
@@ -151,7 +155,7 @@
       e.returnValue = false;
 
       aspectRatio = paper.width / paper.height;
-      wheelDelta *= 70;
+      wheelDelta *= 70 * opts.mouseWheelSensitivity;
 
       console.log(wheelDelta);
 
