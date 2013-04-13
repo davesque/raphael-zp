@@ -1,7 +1,7 @@
 # Raphaël-ZP
 
 A plugin for [Raphaël](http://raphaeljs.com/) version 2.1.0 and above to allow
-click and drag panning as well as mouse wheel zooming.
+click and drag panning and mouse wheel zooming.
 
 ## Acknowledgements
 
