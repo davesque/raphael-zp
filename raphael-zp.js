@@ -90,12 +90,43 @@
     }
 
     /**
-     * Gets an SVGPoint object for the given paper and event objects.
+     * Correctly detect mouse position of event relative to document top-left.
+     * If argument `offsetElement` is specified, mouse position is relative to
+     * top-left of that element.
+     *
+     * Based on code at quirksmode.org:
+     * http://www.quirksmode.org/js/events_properties.html
+     */
+    function getEventMouseCoords(e, offsetElement) {
+      var coords = {}, offset;
+
+      if ( e.pageX || e.pageY ) {
+        coords.x = e.pageX;
+        coords.y = e.pageY;
+      } else {
+        coords.x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+        coords.y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+      }
+
+      if ( offsetElement ) {
+        offset = $(offsetElement).offset();
+        coords.x -= offset.left;
+        coords.y -= offset.top;
+      }
+
+      return coords;
+    }
+
+    /**
+     * Gets an SVGPoint object for the given event object.
      */
     function getEventPoint(e) {
       var p = paper.canvas.createSVGPoint();
-      p.x = e.clientX;
-      p.y = e.clientY;
+      var coords = getEventMouseCoords(e);
+
+      p.x = coords.x;
+      p.y = coords.y;
+
       return p;
     }
 
