@@ -69,8 +69,8 @@
 
       if ( opts.pan ) {
         $el.bind("mousedown", handleMouseDown);
-        $el.bind("mousemove", handleMouseMove);
-        $el.bind("mouseup", handleMouseUp);
+        $(document).bind("mousemove", handleMouseMove);
+        $(document).bind("mouseup", handleMouseUp);
         if ( opts.stopPanOnMouseOut ) $el.bind("mouseout", handleMouseUp);
       }
 
@@ -85,8 +85,8 @@
 
       if ( opts.pan ) {
         $el.unbind("mousedown", handleMouseDown);
-        $el.unbind("mousemove", handleMouseMove);
-        $el.unbind("mouseup", handleMouseUp);
+        $(document).unbind("mousemove", handleMouseMove);
+        $(document).unbind("mouseup", handleMouseUp);
         if ( opts.stopPanOnMouseOut ) $el.unbind("mouseout", handleMouseUp);
       }
 
