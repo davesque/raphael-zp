@@ -122,6 +122,20 @@
     }
 
     /**
+     * Gets coordinates relative to the paper viewbox for the the given page
+     * coordinates.
+     */
+    function getViewBoxCoords(c) {
+      var m = paper.canvas.getScreenCTM();
+      var p = paper.canvas.createSVGPoint();
+
+      p.x = c.x;
+      p.y = c.y;
+
+      return p.matrixTransform(m.inverse());
+    }
+
+    /**
      * Gets the delta (relative to the paper's viewbox size) between the x and
      * y coordinates for two event points.
      */
