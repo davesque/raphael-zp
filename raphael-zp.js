@@ -113,7 +113,11 @@
       }
 
       if ( offsetElement ) {
-        offset = $(offsetElement).offset();
+        // Trust me, the ternary operator looks like crap
+        if ( offsetElement.tagName === "svg" )
+          offset = getSVGCanvasOffset(offsetElement);
+        else
+          offset = $(offsetElement).offset();
         coords.x -= offset.left;
         coords.y -= offset.top;
       }
@@ -133,6 +137,21 @@
       p.y = c.y;
 
       return p.matrixTransform(m.inverse());
+    }
+
+    /**
+     * Gets coordinates relative to the paper viewbox for the the given page
+     * coordinates.
+     */
+    function getSVGCanvasOffset(el) {
+      var m = el.getScreenCTM();
+      var p = el.createSVGPoint();
+
+      p.x = el.viewBox.baseVal.x;
+      p.y = el.viewBox.baseVal.y;
+      p = p.matrixTransform(m);
+
+      return {left: p.x, top: p.y};
     }
 
     /**
