@@ -156,7 +156,11 @@
      * Scales (zooms) the paper view box.
      */
     function handleMouseWheel(e, wheelDelta) {
-      var aspectRatio, strokeScale, c, dx, dy, newWidth, zoomFactor;
+      var aspectRatio,
+          strokeScale,
+          c, dx, dy,
+          newWidth, newHeight,
+          zoomFactor;
 
       if ( e.preventDefault ) e.preventDefault();
       e.returnValue = false;
@@ -176,6 +180,7 @@
       // Calculate new viewbox width
       strokeScale = 1 - wheelDelta * aspectRatio / viewBox[2];
       newWidth = viewBox[2] - wheelDelta * aspectRatio;
+      newHeight = viewBox[3] - wheelDelta;
 
       // Check zoom min and max
       zoomFactor = paper.width / newWidth;
@@ -186,11 +191,11 @@
         return;
       }
 
-      // Update viewbox offset and width.  Yes, height is being left alone on
-      // purpose.
+      // Update viewbox offset and width
       viewBox[0] += dx;
       viewBox[1] += dy;
       viewBox[2] = newWidth;
+      viewBox[3] = newHeight;
 
       if ( opts.scaleStrokeWidth ) {
         paper.forEach(function(el) {
@@ -247,7 +252,7 @@
     state = stateOrigin = null;
 
     // Force view box if none specified
-    if ( !paper._vbSize ) paper.setViewBox(0, 0, paper.width, 1);
+    if ( !paper._vbSize ) paper.setViewBox(0, 0, paper.width, paper.height);
 
     paper._zpResetViewBox = _.clone(paper._viewBox);
     viewBox = _.clone(paper._viewBox);
