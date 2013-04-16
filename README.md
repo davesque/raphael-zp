@@ -7,6 +7,14 @@ click and drag panning and mouse wheel zooming.
 
 Forked from [Raphaël-VEMap](https://github.com/christocracy/raphael-vemap).
 
+## Dependencies
+
+Raphaël-ZP depends on the following libraries/plugins:
+
+* [jQuery](http://jquery.com/)
+* [Underscore.js](http://underscorejs.org/)
+* [jQuery Mousewheel](https://github.com/brandonaaron/jquery-mousewheel)
+
 ## Usage
 
 Calling ZP on a paper object will enable panning and zooming for that paper:
