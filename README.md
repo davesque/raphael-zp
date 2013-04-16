@@ -31,6 +31,10 @@ paper.ZP({
 
   // Zoom options
   zoom: true,
+  // Maximum ratio between the initial paper width and the current viewbox width
+  maxZoomFactor: 2.0,
+  // Minimum ratio between the initial paper width and the current viewbox width
+  minZoomFactor: 0.05,
   // Set this to 0.5 if you want wheel zooming to be half as sensitive.  Set it
   // to 2 if you want it to be twice as sensitive.  Etc.
   mouseWheelSensitivity: 1,

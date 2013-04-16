@@ -53,6 +53,8 @@
 
     // Zoom options
     zoom: true,
+    maxZoomFactor: 2.0,
+    minZoomFactor: 0.05,
     mouseWheelSensitivity: 1,
     scaleStrokeWidth: true
   };
@@ -154,23 +156,41 @@
      * Scales (zooms) the paper view box.
      */
     function handleMouseWheel(e, wheelDelta) {
-      var aspectRatio, strokeScale, c;
+      var aspectRatio, strokeScale, c, dx, dy, newWidth, zoomFactor;
 
       if ( e.preventDefault ) e.preventDefault();
       e.returnValue = false;
 
+      // Limit zoom range
+      if ( opts.maxZoomFactor && (paper.width / paper._viewBox[2]) > opts.maxZoomFactor ) return;
+      if ( opts.minZoomFactor && (paper.width / paper._viewBox[2]) < opts.minZoomFactor ) return;
+
       aspectRatio = paper.width / paper.height;
       wheelDelta *= 70 * opts.mouseWheelSensitivity;
 
-      // Update viewbox x and y offset
+      // Calculate change in viewbox offset
       c = getEventMouseCoords(e, paper.canvas);
-      viewBox[0] += wheelDelta * c.x / paper.height;
-      viewBox[1] += wheelDelta * c.y / paper.height;
+      dx = wheelDelta * c.x / paper.height;
+      dy = wheelDelta * c.y / paper.height;
 
-      // Update viewbox width.  Calculate width change ratio.  And yes, height
-      // is purposefully being left alone.
+      // Calculate new viewbox width
       strokeScale = 1 - wheelDelta * aspectRatio / viewBox[2];
-      viewBox[2] -= wheelDelta * aspectRatio;
+      newWidth = viewBox[2] - wheelDelta * aspectRatio;
+
+      // Check zoom min and max
+      zoomFactor = paper.width / newWidth;
+      if (
+        ( opts.maxZoomFactor && zoomFactor > opts.maxZoomFactor ) ||
+        ( opts.minZoomFactor && zoomFactor < opts.minZoomFactor )
+      ) {
+        return;
+      }
+
+      // Update viewbox offset and width.  Yes, height is being left alone on
+      // purpose.
+      viewBox[0] += dx;
+      viewBox[1] += dy;
+      viewBox[2] = newWidth;
 
       if ( opts.scaleStrokeWidth ) {
         paper.forEach(function(el) {
