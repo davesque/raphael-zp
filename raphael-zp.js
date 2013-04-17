@@ -200,6 +200,7 @@
         });
       }
 
+      paper._zpZoomFactor = zoomFactor;
       paper.setViewBox(viewBox[0], viewBox[1], viewBox[2], viewBox[3]);
     }
 
@@ -250,6 +251,7 @@
     // Force view box if none specified
     if ( !paper._vbSize ) paper.setViewBox(0, 0, paper.width, paper.height);
 
+    paper._zpZoomFactor = paper.width / paper._viewBox[2];
     paper._zpResetViewBox = _.clone(paper._viewBox);
     viewBox = _.clone(paper._viewBox);
 
@@ -257,6 +259,7 @@
 
     paper.unZP = function() {
       removeHandlers(paper.canvas);
+      delete paper._zpZoomFactor;
       delete paper._zpResetViewBox;
       delete paper._zpInitialized;
       delete paper.unZP;
