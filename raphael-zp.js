@@ -165,10 +165,6 @@
       if ( e.preventDefault ) e.preventDefault();
       e.returnValue = false;
 
-      // Limit zoom range
-      if ( opts.maxZoomFactor && (paper.width / paper._viewBox[2]) > opts.maxZoomFactor ) return;
-      if ( opts.minZoomFactor && (paper.width / paper._viewBox[2]) < opts.minZoomFactor ) return;
-
       aspectRatio = paper.width / paper.height;
       wheelDelta *= 70 * opts.mouseWheelSensitivity;
 
