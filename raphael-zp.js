@@ -208,10 +208,7 @@
      * Modifies the paper view box if current state is "pan".
      */
     function handleMouseMove(e) {
-      if ( e.preventDefault ) e.preventDefault();
-      e.returnValue = false;
-
-      if ( state == "pan" ) {
+      if ( state === "pan" ) {
         var c = getEventMouseCoords(e);
         var d = getPointDelta(stateOrigin, c);
         paper.setViewBox(viewBox[0] - d.dx, viewBox[1] - d.dy, viewBox[2], viewBox[3]);
@@ -222,9 +219,6 @@
      * Sets "pan" state and records event origin.
      */
     function handleMouseDown(e) {
-      if ( e.preventDefault ) e.preventDefault();
-      e.returnValue = false;
-
       state = "pan";
       stateOrigin = getEventMouseCoords(e);
     }
@@ -233,15 +227,14 @@
      * Resets state on mouse button up event.
      */
     function handleMouseUp(e) {
-      if ( e.preventDefault ) e.preventDefault();
-      e.returnValue = false;
+      if ( state === "pan" ) {
+        var c = getEventMouseCoords(e);
+        var d = getPointDelta(stateOrigin, c);
+        viewBox[0] -= d.dx;
+        viewBox[1] -= d.dy;
 
-      var c = getEventMouseCoords(e);
-      var d = getPointDelta(stateOrigin, c);
-      viewBox[0] -= d.dx;
-      viewBox[1] -= d.dy;
-
-      state = stateOrigin = null;
+        state = stateOrigin = null;
+      }
     }
 
     if ( paper._zpInitialized ) return paper;
